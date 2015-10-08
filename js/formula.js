@@ -328,7 +328,7 @@ let Formula = {
 		
 		return '-'
 	}
-}
+};
 
 Formula.equipmentType.MainGuns = [
 		Formula.equipmentType.SmallCaliber,
@@ -337,29 +337,29 @@ Formula.equipmentType.MainGuns = [
 		Formula.equipmentType.MediumCaliber,
 		Formula.equipmentType.LargeCaliber,
 		Formula.equipmentType.SuperCaliber
-	]
+	];
 
 Formula.equipmentType.LargeCalibers = [
 		Formula.equipmentType.LargeCaliber,
 		Formula.equipmentType.SuperCaliber
-	]
+	];
 
 Formula.equipmentType.SecondaryGuns = [
 		Formula.equipmentType.SecondaryGun,
 		Formula.equipmentType.SecondaryGunHigh,
 		Formula.equipmentType.SecondaryGunAA
-	]
+	];
 
 Formula.equipmentType.Torpedos = [
 		Formula.equipmentType.Torpedo,
 		Formula.equipmentType.SubmarineTorpedo
-	]
+	];
 
 Formula.equipmentType.Seaplanes = [
 		Formula.equipmentType.ReconSeaplane,
 		Formula.equipmentType.ReconSeaplaneNight,
 		Formula.equipmentType.SeaplaneBomber
-	]
+	];
 
 Formula.equipmentType.Fighters = [
 		Formula.equipmentType.SeaplaneBomber,
@@ -367,64 +367,64 @@ Formula.equipmentType.Fighters = [
 		Formula.equipmentType.TorpedoBomber,
 		Formula.equipmentType.DiveBomber,
 		Formula.equipmentType.CarrierRecon
-	]
+	];
 
 Formula.equipmentType.Recons = [
 		Formula.equipmentType.ReconSeaplane,
 		Formula.equipmentType.ReconSeaplaneNight,
 		Formula.equipmentType.CarrierRecon
-	]
+	];
 
 Formula.equipmentType.AircraftBased = [
 		Formula.equipmentType.CarrierFighter,
 		Formula.equipmentType.TorpedoBomber,
 		Formula.equipmentType.DiveBomber,
 		Formula.equipmentType.CarrierRecon
-	]
+	];
 
 Formula.equipmentType.Radars = [
 		Formula.equipmentType.SmallRadar,
 		Formula.equipmentType.LargeRadar,
 		Formula.equipmentType.SuparRadar
-	]
+	];
 
 Formula.equipmentType.AntiSubmarines = [
 		Formula.equipmentType.DepthCharge,
 		Formula.equipmentType.Sonar,
 		Formula.equipmentType.LargeSonar
-	]
+	];
 
 Formula.equipmentType.AAGuns = [
 		Formula.equipmentType.AAGun,
 		Formula.equipmentType.AAGunConcentrated
-	]
+	];
 
 Formula.equipmentType.Searchlights = [
 		Formula.equipmentType.Searchlight,
 		Formula.equipmentType.SearchlightLarge
-	]
+	];
 
 
 
 
 Formula.shellingDamage = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
 	return this.calculate( 'shellingDamage', ship, equipments_by_slot, star_by_slot, rank_by_slot )
-}
+};
 Formula.torpedoDamage = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
 	return this.calculate( 'torpedoDamage', ship, equipments_by_slot, star_by_slot, rank_by_slot )
-}
+};
 Formula.fighterPower = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
 	return this.calculate( 'fighterPower', ship, equipments_by_slot, star_by_slot, rank_by_slot )
-}
+};
 Formula.nightBattle = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
 	return this.calculate( 'nightBattle', ship, equipments_by_slot, star_by_slot, rank_by_slot )
-}
+};
 Formula.addHit = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
 	return this.calculate( 'addHit', ship, equipments_by_slot, star_by_slot, rank_by_slot )
-}
+};
 Formula.addArmor = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
 	return this.calculate( 'addArmor', ship, equipments_by_slot, star_by_slot, rank_by_slot )
-}
+};
 Formula.addEvasion = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
 	return this.calculate( 'addEvasion', ship, equipments_by_slot, star_by_slot, rank_by_slot )
-}
+};
