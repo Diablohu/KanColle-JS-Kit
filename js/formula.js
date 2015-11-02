@@ -283,7 +283,7 @@ let Formula = {
 					// 航母没有夜战
 					return '-'
 				}else{
-					console.log(count)
+					//console.log(count)
 					result = powerFire() + powerTorpedo()
 					if( count.torpedo >= 2 ){
 						return '雷击CI ' + Math.floor( result * 1.5 ) + ' x 2'
