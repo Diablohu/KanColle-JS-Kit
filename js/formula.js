@@ -207,7 +207,8 @@ let Formula = {
 		})
 		
 		switch(type){
-			// 制空战力，装备须为战斗机类型 Formula.type.typeFighters
+			// 制空战力，装备须为战斗机类型 Formula.equipmentType.Fighters
+			// 计算公式参考 http://bbs.ngacn.cc/read.php?tid=8680767
 			case 'fighterPower':
 				value = 0
 				ship.slot.map(function(carry, index){
@@ -246,6 +247,12 @@ let Formula = {
 				})
 				return result
 				//return Math.floor(result)
+				break;
+
+			// 同时返回制空战力的上下限
+			// 返回值为Array
+			case 'fighterPower_v2':
+				return Formula.calcBySlot.fighterPower_v2(ship, equipments_by_slot, star_by_slot, rank_by_slot)
 				break;
 			
 			// 炮击威力，除潜艇外
@@ -327,7 +334,9 @@ let Formula = {
 		}
 		
 		return '-'
-	}
+	},
+	
+	calcBySlot: {}
 };
 
 Formula.equipmentType.MainGuns = [
@@ -365,8 +374,8 @@ Formula.equipmentType.Fighters = [
 		Formula.equipmentType.SeaplaneBomber,
 		Formula.equipmentType.CarrierFighter,
 		Formula.equipmentType.TorpedoBomber,
-		Formula.equipmentType.DiveBomber,
-		Formula.equipmentType.CarrierRecon
+		Formula.equipmentType.DiveBomber/*,
+		Formula.equipmentType.CarrierRecon*/
 	];
 
 Formula.equipmentType.Recons = [
@@ -416,6 +425,9 @@ Formula.torpedoDamage = function(ship, equipments_by_slot, star_by_slot, rank_by
 Formula.fighterPower = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
 	return this.calculate( 'fighterPower', ship, equipments_by_slot, star_by_slot, rank_by_slot )
 };
+Formula.fighterPower_v2 = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
+	return this.calculate( 'fighterPower_v2', ship, equipments_by_slot, star_by_slot, rank_by_slot )
+};
 Formula.nightBattle = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
 	return this.calculate( 'nightBattle', ship, equipments_by_slot, star_by_slot, rank_by_slot )
 };
@@ -428,3 +440,84 @@ Formula.addArmor = function(ship, equipments_by_slot, star_by_slot, rank_by_slot
 Formula.addEvasion = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
 	return this.calculate( 'addEvasion', ship, equipments_by_slot, star_by_slot, rank_by_slot )
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Formula.calcBySlot.fighterPower_v2 = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
+	let rankInternal = []
+		,typeValue = {}
+		,results = [0, 0]
+
+	rankInternal[0] = [0, 9]
+	rankInternal[1] = [10, 24]
+	rankInternal[2] = [25, 39]
+	rankInternal[3] = [40, 54]
+	rankInternal[4] = [55, 69]
+	rankInternal[5] = [70, 84]
+	rankInternal[6] = [85, 99]
+	rankInternal[7] = [100, 120]
+	
+	typeValue.CarrierFighter = [
+		0,
+		0,
+		2,
+		5,
+		9,
+		14,
+		14,
+		22
+	]
+	
+	typeValue.others = [
+		0,
+		0,
+		1,
+		1,
+		1,
+		3,
+		3,
+		6
+	]
+
+	ship.slot.map(function(carry, index){
+		if( equipments_by_slot[index]
+			&& $.inArray( equipments_by_slot[index].type, Formula.equipmentType.Fighters ) > -1
+			&& carry
+		){
+			// Math.floor(Math.sqrt(carry) * (equipments_by_slot[index].stat.aa || 0) + Math.sqrt( rankInternal / 10 ) + typeValue)
+			let base = Math.sqrt(carry) * (equipments_by_slot[index].stat.aa || 0)
+				,_rank = rank_by_slot[index] || 0
+				,_rankInternal = rankInternal[_rank]
+				,_typeValue = equipments_by_slot[index].type == Formula.equipmentType.CarrierFighter
+								? typeValue.CarrierFighter[_rank]
+								: typeValue.others[_rank]
+			results[0]+= Math.floor(base + Math.sqrt( _rankInternal[0] / 10 ) + _typeValue)
+			results[1]+= Math.floor(base + Math.sqrt( _rankInternal[1] / 10 ) + _typeValue)
+		}
+	})
+	return results
+}
