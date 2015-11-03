@@ -254,7 +254,7 @@ let Formula = {
 			// 同时返回制空战力的上下限
 			// 返回值为Array
 			case 'fighterPower_v2':
-				return Formula.calcBySlot.fighterPower_v2(ship, equipments_by_slot, star_by_slot, rank_by_slot)
+				return Formula.calcByShip.fighterPower_v2(ship, equipments_by_slot, star_by_slot, rank_by_slot)
 				break;
 			
 			// 炮击威力，除潜艇外
@@ -336,14 +336,14 @@ let Formula = {
 
 			// 索敌能力
 			case 'losPower':
-				return Formula.calcBySlot.losPower(ship, equipments_by_slot, star_by_slot, rank_by_slot, options)
+				return Formula.calcByShip.losPower(ship, equipments_by_slot, star_by_slot, rank_by_slot, options)
 				break;
 		}
 		
 		return '-'
 	},
 	
-	calcBySlot: {}
+	calcByShip: {}
 };
 
 Formula.equipmentType.MainGuns = [
@@ -508,7 +508,7 @@ Formula.losPower = function(ship, equipments_by_slot, star_by_slot, rank_by_slot
 
 
 
-Formula.calcBySlot.fighterPower_v2 = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
+Formula.calcByShip.fighterPower_v2 = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
 	// http://bbs.ngacn.cc/read.php?tid=8680767
 	// http://ja.kancolle.wikia.com/wiki/%E8%89%A6%E8%BC%89%E6%A9%9F%E7%86%9F%E7%B7%B4%E5%BA%A6
 
@@ -568,7 +568,7 @@ Formula.calcBySlot.fighterPower_v2 = function(ship, equipments_by_slot, star_by_
 	return results
 }
 
-Formula.calcBySlot.losPower = function(ship, equipments_by_slot, star_by_slot, rank_by_slot, options){
+Formula.calcByShip.losPower = function(ship, equipments_by_slot, star_by_slot, rank_by_slot, options){
 	// http://biikame.hatenablog.com/entry/2014/11/14/224925
 	
 	options = options || {}
