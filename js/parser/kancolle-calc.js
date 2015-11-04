@@ -160,10 +160,16 @@ _g.kancolle_calc = {
 											result[i][j][2][k] = data_item.id
 											result[i][j][3][k] = data_item.rf || null
 											result[i][j][4][k] = data_item.rp || null
+										}else{
+											result[i][j][2][k] = null
+											result[i][j][3][k] = null
+											result[i][j][4][k] = null
 										}
 										k++
 									}
 								}
+							}else{
+								result[i][j] = null
 							}
 							j++
 						}
