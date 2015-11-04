@@ -123,39 +123,50 @@ _g.kancolle_calc = {
 			,data_fleet
 			,data_ship
 			,data_item
+			,max_fleets = 4
+			,max_ships_per_fleet = 6
+			,max_equipments_per_ship = 5
 		
 		switch(version){
 			case 3:
 				result = []
 				i=0
-				while( data_fleet = data['f' + (i+1)] ){
+				//while( data_fleet = data['f' + (i+1)] ){
+				while( i<max_fleets ){
+					data_fleet = data['f' + (i+1)]
 					result[i] = []
-					j=0
-					while( data_ship = data_fleet['s' + (j+1)] ){
-						if( data_ship.id ){
-							result[i][j] = [
-								data_ship.id,
-								[
-									data_ship.lv || null,
-									data_ship.luck || -1
-								],
-								[],
-								[],
-								[]
-							]
-						}
-						if( data_ship.items ){
-							k=0
-							while( data_item = data_ship.items['i' + (k+1)] ){
-								if( data_item.id ){
-									result[i][j][2][k] = data_item.id
-									result[i][j][3][k] = data_item.rf || null
-									result[i][j][4][k] = data_item.rp || null
+					if( data_fleet ){
+						j=0
+						//while( data_ship = data_fleet['s' + (j+1)] ){
+						while( j<max_ships_per_fleet ){
+							data_ship = data_fleet['s' + (j+1)]
+							if( data_ship && data_ship.id ){
+								result[i][j] = [
+									data_ship.id,
+									[
+										data_ship.lv || null,
+										data_ship.luck || -1
+									],
+									[],
+									[],
+									[]
+								]
+								if( data_ship.items ){
+									k=0
+									//while( data_item = data_ship.items['i' + (k+1)] ){
+									while( k<max_equipments_per_ship ){
+										data_item = data_ship.items['i' + (k+1)]
+										if( data_item && data_item.id ){
+											result[i][j][2][k] = data_item.id
+											result[i][j][3][k] = data_item.rf || null
+											result[i][j][4][k] = data_item.rp || null
+										}
+										k++
+									}
 								}
-								k++
 							}
+							j++
 						}
-						j++
 					}
 					i++
 				}
