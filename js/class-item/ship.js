@@ -218,6 +218,8 @@ class Ship extends ItemBase{
 			max = parseFloat(max) || base
 			if( base < 0 || max < 0 )
 				return -1
+			if( base == max )
+				return max
 			return Math.floor( base + (max - base) * lvl / 99 )
 		}
 		
