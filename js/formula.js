@@ -23,6 +23,8 @@ let Formula = {
 			TorpedoBomber:		19,		// 舰攻 / 舰载鱼雷轰炸机
 			DiveBomber:			20,		// 舰爆 / 舰载俯冲轰炸机
 			CarrierRecon:		21,		// 舰侦 / 舰载侦察机
+			Autogyro:			22,		// 旋翼机
+			AntiSubPatrol:		23,		// 对潜哨戒机
 			SmallRadar:			24,		// 小型雷达
 			LargeRadar:			25,		// 大型雷达
 			DepthCharge:		26,		// 爆雷
@@ -84,7 +86,7 @@ let Formula = {
 							isCV = true
 						}else{
 							equipments_by_slot.forEach(function(equipment){
-								if( equipment && !isCV && $.inArray(equipment.type, Formula.equipmentType.AircraftBased) > -1 )
+								if( equipment && !isCV && $.inArray(equipment.type, Formula.equipmentType.CarrierBased) > -1 )
 									isCV = true
 							})
 						}
@@ -409,7 +411,7 @@ Formula.equipmentType.CarrierRecons = [
 		Formula.equipmentType.CarrierRecon2
 	];
 
-Formula.equipmentType.AircraftBased = [
+Formula.equipmentType.CarrierBased = [
 		Formula.equipmentType.CarrierFighter,
 		Formula.equipmentType.TorpedoBomber,
 		Formula.equipmentType.DiveBomber,
@@ -424,6 +426,25 @@ Formula.equipmentType.TorpedoBombers = [
 Formula.equipmentType.DiveBombers = [
 		Formula.equipmentType.DiveBomber
 	];
+
+Formula.equipmentType.Autogyros = [
+		Formula.equipmentType.Autogyro
+	];
+
+Formula.equipmentType.AntiSubPatrols = [
+		Formula.equipmentType.AntiSubPatrol
+	];
+
+Formula.equipmentType.Aircrafts = [];
+	[].concat(Formula.equipmentType.Seaplanes)
+		.concat(Formula.equipmentType.Recons)
+		.concat(Formula.equipmentType.CarrierBased)
+		.concat(Formula.equipmentType.Autogyros)
+		.concat(Formula.equipmentType.AntiSubPatrols)
+		.forEach(function(v){
+			if( Formula.equipmentType.Aircrafts.indexOf(v) < 0 )
+				Formula.equipmentType.Aircrafts.push(v)
+		})
 
 Formula.equipmentType.Radars = [
 		Formula.equipmentType.SmallRadar,
