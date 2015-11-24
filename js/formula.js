@@ -209,7 +209,7 @@ let Formula = {
 			
 			// 夜战模式 & 伤害力
 			case 'nightBattle':
-				if( $.inArray(ship.type, Formula.shipType.Carriers) > -1 ){
+				if( !ship.additional_night_shelling && $.inArray(ship.type, Formula.shipType.Carriers) > -1 ){
 					// 航母没有夜战
 					return '-'
 				}else{
