@@ -201,7 +201,7 @@ _g.kancolle_calc = {
 				data.forEach(function(data_fleet, i){
 					result['f' + (i+1)] = {}
 					data_fleet.forEach(function(data_ship, j){
-						if( data_ship[0] ){
+						if( data_ship && data_ship[0] ){
 							result['f' + (i+1)]['s' + (j+1)] = {
 								'id':	parseInt(data_ship[0]),
 								'lv':	parseInt(data_ship[1][0]) || null,
