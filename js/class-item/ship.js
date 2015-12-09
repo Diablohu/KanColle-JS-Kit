@@ -217,8 +217,8 @@ class Ship extends ItemBase{
 	
 	getAttribute(attr, lvl){
 		lvl = lvl || 1
-		if( lvl > 150 )
-			lvl = 150
+		if( lvl > Ship.lvlMax )
+			lvl = Ship.lvlMax
 		
 		let getStatOfLvl = function( lvl, base, max ){
 			lvl = lvl || 1
@@ -315,3 +315,5 @@ class Ship extends ItemBase{
 		return this.getIllustrator()
 	}
 }
+
+Ship.lvlMax = 155;
