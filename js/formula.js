@@ -36,7 +36,8 @@ let Formula = {
 			LargeFlyingBoat:	45,		// 大型水上飞艇
 			SearchlightLarge:	46,		// 大型探照灯
 			SuparRadar:			47,		// 超大型雷达
-			CarrierRecon2:		50		// 舰侦II / 舰载侦察机II
+			CarrierRecon2:		50,		// 舰侦II / 舰载侦察机II
+			SeaplaneFighter:	51		// 水战 / 水上战斗机
 		},
 	
 	// 舰种
@@ -307,14 +308,16 @@ Formula.equipmentType.Torpedos = [
 Formula.equipmentType.Seaplanes = [
 		Formula.equipmentType.ReconSeaplane,
 		Formula.equipmentType.ReconSeaplaneNight,
-		Formula.equipmentType.SeaplaneBomber
+		Formula.equipmentType.SeaplaneBomber,
+		Formula.equipmentType.SeaplaneFighter
 	];
 
 Formula.equipmentType.Fighters = [
 		Formula.equipmentType.SeaplaneBomber,
 		Formula.equipmentType.CarrierFighter,
 		Formula.equipmentType.TorpedoBomber,
-		Formula.equipmentType.DiveBomber/*,
+		Formula.equipmentType.DiveBomber,
+		Formula.equipmentType.SeaplaneFighter/*,
 		Formula.equipmentType.CarrierRecon*/
 	];
 
@@ -333,7 +336,8 @@ Formula.equipmentType.SeaplaneRecons = [
 	];
 
 Formula.equipmentType.SeaplaneBombers = [
-		Formula.equipmentType.SeaplaneBomber
+		Formula.equipmentType.SeaplaneBomber,
+		Formula.equipmentType.SeaplaneFighter
 	];
 
 Formula.equipmentType.CarrierRecons = [
