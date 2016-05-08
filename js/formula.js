@@ -837,6 +837,8 @@ Formula.losPower = function(ship, equipments_by_slot, star_by_slot, rank_by_slot
 					,_typeValue = 0
 				if( equipments_by_slot[index].type == Formula.equipmentType.CarrierFighter )
 					_typeValue = typeValue.CarrierFighter[_rank]
+				if( equipments_by_slot[index].type == Formula.equipmentType.SeaplaneFighter )
+					_typeValue = typeValue.CarrierFighter[_rank]
 				if( equipments_by_slot[index].type == Formula.equipmentType.SeaplaneBomber )
 					_typeValue = typeValue.SeaplaneBomber[_rank]
 				results[0]+= Math.floor(base + Math.sqrt( _rankInternal[0] / 10 ) + _typeValue)
