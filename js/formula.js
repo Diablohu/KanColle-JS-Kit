@@ -271,6 +271,9 @@ let Formula = {
 			case 'losPower':
 				return Formula.calcByShip.losPower(ship, equipments_by_slot, star_by_slot, rank_by_slot, options)
 				break;
+			default:
+				return Formula.calcByShip[type](ship, equipments_by_slot, star_by_slot, rank_by_slot, options)
+				break;
 		}
 		
 		return '-'
@@ -719,14 +722,36 @@ Formula.losPower = function(ship, equipments_by_slot, star_by_slot, rank_by_slot
 			let count = parseInt(ship[i]) || 0
 				,multiper = 0
 			switch(i){
+				case 1:
+				case '1':
+				case 19:
+				case '19':
 				case 'dd':		multiper = 5;		break;
+				case 2:
+				case '2':
 				case 'cl':		multiper = 2;		break;
+				case 5:
+				case '5':
 				case 'cav':		multiper = 4;		break;
+				case 12:
+				case '12':
+				case 24:
+				case '24':
 				case 'av':		multiper = 9.5;		break;
+				case 15:
+				case '15':
 				case 'lha':		multiper = 12.25;	break;
+				case 29:
+				case '29':
 				case 'ao':		multiper = 14.75;	break;
+				case 8:
+				case '8':
 				case 'bbv':
+				case 14:
+				case '14':
 				case 'ssv':		multiper = 7;		break;
+				case 21:
+				case '21':
 				case 'ct':		multiper = 6;		break;
 			}
 			result+= multiper * count
@@ -945,4 +970,21 @@ Formula.losPower = function(ship, equipments_by_slot, star_by_slot, rank_by_slot
 		})
 		
 		return Formula.calc.losPower(x);
+	}
+	
+	Formula.calcByShip.TP = function(ship, equipments_by_slot, star_by_slot, rank_by_slot, options){
+		var data = {
+			ship: {},
+			equipment: {}
+		}
+		data.ship[ship.type] = 1
+		equipments_by_slot.forEach(function(equipment){
+			if( equipment ){
+				if( !data.equipment[equipment.id] )
+					data.equipment[equipment.id] = 0
+				data.equipment[equipment.id]++
+			}
+		})
+		console.log(data)
+		return Formula.calc.TP(data)
 	}
