@@ -689,6 +689,65 @@ Formula.losPower = function(ship, equipments_by_slot, star_by_slot, rank_by_slot
 		//var result = calc(x);
 		//var score = result.y_estimate.toFixed(1) + ' ± ' + result.y_std_error.toFixed(1);
 	}
+	
+	Formula.calc.TP = function( data ){
+		/* data
+		 * {
+		 * 		ship: {
+		 * 			dd
+		 * 			cl
+		 * 			cav
+		 * 			bbv
+		 * 			ssv
+		 * 			av
+		 * 			lha
+		 * 			ao
+		 * 			ct
+		 * 		},
+		 * 		equipment: {
+		 * 			68	// landing craft
+		 * 			75  // canister
+		 * 		}
+		 * }
+		 */
+		data = data || {}
+		var result = 0
+			,ship = data.ship || {}
+			,equipment = data.equipment || {}
+
+		for(let i in ship){
+			let count = parseInt(ship[i]) || 0
+				,multiper = 0
+			switch(i){
+				case 'dd':		multiper = 5;		break;
+				case 'cl':		multiper = 2;		break;
+				case 'cav':		multiper = 4;		break;
+				case 'av':		multiper = 9.5;		break;
+				case 'lha':		multiper = 12.25;	break;
+				case 'ao':		multiper = 14.75;	break;
+				case 'bbv':
+				case 'ssv':		multiper = 7;		break;
+				case 'ct':		multiper = 6;		break;
+			}
+			result+= multiper * count
+		}
+
+		for(let i in equipment){
+			let count = parseInt(equipment[i]) || 0
+				,multiper = 0
+			switch(i){
+				// landing craft
+				case 68:
+				case '68':		multiper = 8;	break;
+				// canister
+				case 75:
+				case '75':		multiper = 5;	break;
+			}
+			result+= multiper * count
+		}
+		
+		return result
+	}
 
 
 
