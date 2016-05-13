@@ -37,7 +37,9 @@ let Formula = {
 			SearchlightLarge:	46,		// 大型探照灯
 			SuparRadar:			47,		// 超大型雷达
 			CarrierRecon2:		50,		// 舰侦II / 舰载侦察机II
-			SeaplaneFighter:	51		// 水战 / 水上战斗机
+			SeaplaneFighter:	51,		// 水战 / 水上战斗机
+			LandBasedAttacker:	53,		// 陆攻 / 陆上攻击机
+			Interceptor:		54		// 局战 / 局地战斗机
 		},
 	
 	// 舰种
@@ -356,6 +358,11 @@ Formula.equipmentType.CarrierBased = [
 		Formula.equipmentType.CarrierRecon2
 	];
 
+Formula.equipmentType.LandBased = [
+		Formula.equipmentType.LandBasedAttacker,
+		Formula.equipmentType.Interceptor
+	];
+
 Formula.equipmentType.TorpedoBombers = [
 		Formula.equipmentType.TorpedoBomber
 	];
@@ -378,6 +385,7 @@ Formula.equipmentType.Aircrafts = [];
 		.concat(Formula.equipmentType.CarrierBased)
 		.concat(Formula.equipmentType.Autogyros)
 		.concat(Formula.equipmentType.AntiSubPatrols)
+		.concat(Formula.equipmentType.LandBased)
 		.forEach(function(v){
 			if( Formula.equipmentType.Aircrafts.indexOf(v) < 0 )
 				Formula.equipmentType.Aircrafts.push(v)
