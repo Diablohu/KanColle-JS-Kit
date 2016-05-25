@@ -1,6 +1,13 @@
 // 公式来源: http://bbs.ngacn.cc/read.php?tid=8329592
 
 let Formula = {
+	
+	// 数据存储对象
+		data: {
+			'ships': 		this.dataShips,
+			'equipments': 	this.dataEquipments
+		},
+	
 	// 装备类型
 		equipmentType: {
 			SmallCaliber:		1,		// 小口径主炮
@@ -69,7 +76,7 @@ let Formula = {
 			return 0
 		
 		if( !(ship instanceof Ship) )
-			ship = _g.data.ships[ship]
+			ship = Formula.data.ships[ship]
 		
 		let result = 0
 			,count = {
@@ -117,7 +124,7 @@ let Formula = {
 					return null
 				if( equipment instanceof Equipment )
 					return equipment
-				return _g.data.items[equipment]
+				return Formula.data.equipments[equipment]
 			}) || []
 		star_by_slot = star_by_slot || []
 		rank_by_slot = rank_by_slot || []
@@ -781,6 +788,77 @@ Formula.losPower = function(ship, equipments_by_slot, star_by_slot, rank_by_slot
 		
 		return result
 	}
+	
+	Formula.calc.fighterPower = function( equipment, carry, rank ){
+		if( !equipment )
+			return [0, 0]
+
+		equipment = equipment instanceof Equipment ? equipment : Formula.data.equipments[equipment]
+		carry = carry || 0
+		rank = rank || 0
+		
+		// http://bbs.ngacn.cc/read.php?tid=8680767
+		// http://ja.kancolle.wikia.com/wiki/%E8%89%A6%E8%BC%89%E6%A9%9F%E7%86%9F%E7%B7%B4%E5%BA%A6
+	
+		let rankInternal = []
+			,typeValue = {}
+			,results = [0, 0]
+	
+		rankInternal[0] = [0, 9]
+		rankInternal[1] = [10, 24]
+		rankInternal[2] = [25, 39]
+		rankInternal[3] = [40, 54]
+		rankInternal[4] = [55, 69]
+		rankInternal[5] = [70, 84]
+		rankInternal[6] = [85, 99]
+		rankInternal[7] = [100, 120]
+		
+		typeValue.CarrierFighter = [
+			0,
+			0,
+			2,
+			5,
+			9,
+			14,
+			14,
+			22
+		]
+		
+		typeValue.SeaplaneBomber = [
+			0,
+			0,
+			1,
+			1,
+			1,
+			3,
+			3,
+			6
+		]
+	
+		if( $.inArray( equipment.type, Formula.equipmentType.Fighters ) > -1
+			&& carry
+		){
+			// Math.floor(Math.sqrt(carry) * (equipment.stat.aa || 0) + Math.sqrt( rankInternal / 10 ) + typeValue)
+			let statAA = equipment.stat.aa || 0 + ( equipment.type == Formula.equipmentType.Interceptor ? equipment.stat.evasion * 1.5 : 0 )
+				,base = Math.sqrt(carry) * statAA
+				,_rankInternal = rankInternal[rank]
+				,_typeValue = 0
+				
+			if( equipment.type == Formula.equipmentType.CarrierFighter )
+				_typeValue = typeValue.CarrierFighter[rank]
+			else if( equipment.type == Formula.equipmentType.Interceptor )
+				_typeValue = typeValue.CarrierFighter[rank]
+			else if( equipment.type == Formula.equipmentType.SeaplaneFighter )
+				_typeValue = typeValue.CarrierFighter[rank]
+			else if( equipment.type == Formula.equipmentType.SeaplaneBomber )
+				_typeValue = typeValue.SeaplaneBomber[rank]
+
+			results[0]+= Math.floor(base + Math.sqrt( _rankInternal[0] / 10 ) + _typeValue)
+			results[1]+= Math.floor(base + Math.sqrt( _rankInternal[1] / 10 ) + _typeValue)
+		}
+
+		return results
+	}
 
 
 
@@ -879,63 +957,12 @@ Formula.losPower = function(ship, equipments_by_slot, star_by_slot, rank_by_slot
 	};
 
 	Formula.calcByShip.fighterPower_v2 = function(ship, equipments_by_slot, star_by_slot, rank_by_slot){
-		// http://bbs.ngacn.cc/read.php?tid=8680767
-		// http://ja.kancolle.wikia.com/wiki/%E8%89%A6%E8%BC%89%E6%A9%9F%E7%86%9F%E7%B7%B4%E5%BA%A6
-	
-		let rankInternal = []
-			,typeValue = {}
-			,results = [0, 0]
-	
-		rankInternal[0] = [0, 9]
-		rankInternal[1] = [10, 24]
-		rankInternal[2] = [25, 39]
-		rankInternal[3] = [40, 54]
-		rankInternal[4] = [55, 69]
-		rankInternal[5] = [70, 84]
-		rankInternal[6] = [85, 99]
-		rankInternal[7] = [100, 120]
-		
-		typeValue.CarrierFighter = [
-			0,
-			0,
-			2,
-			5,
-			9,
-			14,
-			14,
-			22
-		]
-		
-		typeValue.SeaplaneBomber = [
-			0,
-			0,
-			1,
-			1,
-			1,
-			3,
-			3,
-			6
-		]
+		let results = [0, 0]
 	
 		ship.slot.map(function(carry, index){
-			if( equipments_by_slot[index]
-				&& $.inArray( equipments_by_slot[index].type, Formula.equipmentType.Fighters ) > -1
-				&& carry
-			){
-				// Math.floor(Math.sqrt(carry) * (equipments_by_slot[index].stat.aa || 0) + Math.sqrt( rankInternal / 10 ) + typeValue)
-				let base = Math.sqrt(carry) * (equipments_by_slot[index].stat.aa || 0)
-					,_rank = rank_by_slot[index] || 0
-					,_rankInternal = rankInternal[_rank]
-					,_typeValue = 0
-				if( equipments_by_slot[index].type == Formula.equipmentType.CarrierFighter )
-					_typeValue = typeValue.CarrierFighter[_rank]
-				if( equipments_by_slot[index].type == Formula.equipmentType.SeaplaneFighter )
-					_typeValue = typeValue.CarrierFighter[_rank]
-				if( equipments_by_slot[index].type == Formula.equipmentType.SeaplaneBomber )
-					_typeValue = typeValue.SeaplaneBomber[_rank]
-				results[0]+= Math.floor(base + Math.sqrt( _rankInternal[0] / 10 ) + _typeValue)
-				results[1]+= Math.floor(base + Math.sqrt( _rankInternal[1] / 10 ) + _typeValue)
-			}
+			let r = Formula.calc.fighterPower( equipments_by_slot[index], carry, rank_by_slot[index] || 0 )
+			results[0]+= r[0]
+			results[1]+= r[1]
 		})
 		return results
 	}
