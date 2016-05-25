@@ -329,7 +329,9 @@ Formula.equipmentType.Fighters = [
 		Formula.equipmentType.CarrierFighter,
 		Formula.equipmentType.TorpedoBomber,
 		Formula.equipmentType.DiveBomber,
-		Formula.equipmentType.SeaplaneFighter/*,
+		Formula.equipmentType.SeaplaneFighter,
+		Formula.equipmentType.LandBasedAttacker,
+		Formula.equipmentType.Interceptor/*,
 		Formula.equipmentType.CarrierRecon*/
 	];
 
@@ -834,7 +836,7 @@ Formula.losPower = function(ship, equipments_by_slot, star_by_slot, rank_by_slot
 			3,
 			6
 		]
-	
+		
 		if( $.inArray( equipment.type, Formula.equipmentType.Fighters ) > -1
 			&& carry
 		){
