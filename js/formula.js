@@ -4,8 +4,8 @@ let Formula = {
 	
 	// 数据存储对象
 		data: {
-			'ships': 		this.dataShips,
-			'equipments': 	this.dataEquipments
+			'ships': 		{},
+			'equipments': 	{}
 		},
 	
 	// 装备类型
