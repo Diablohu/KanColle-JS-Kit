@@ -106,6 +106,10 @@ _g.kancolle_calc.encode( data, version )
 
 _g.kancolle_calc = {
 	version: 3,
+	
+	max_fleets: 4,
+	max_ships_per_fleet: 6,
+	max_equipments_per_ship: 5,
 
 	decode: function(data, version){
 		if( !data )
@@ -123,42 +127,81 @@ _g.kancolle_calc = {
 			,data_fleet
 			,data_ship
 			,data_item
+			,max_fleets = 4
+			,max_ships_per_fleet = 6
+			,max_equipments_per_ship = 5
 		
 		switch(version){
 			case 3:
 				result = []
 				i=0
-				while( data_fleet = data['f' + (i+1)] ){
+				//while( data_fleet = data['f' + (i+1)] ){
+				while( i < max_fleets ){
+					data_fleet = data['f' + (i+1)]
 					result[i] = []
-					j=0
-					while( data_ship = data_fleet['s' + (j+1)] ){
-						if( data_ship.id ){
-							result[i][j] = [
-								data_ship.id,
-								[
-									data_ship.lv || null,
-									data_ship.luck || -1
-								],
-								[],
-								[],
-								[]
-							]
-						}
-						if( data_ship.items ){
-							k=0
-							while( data_item = data_ship.items['i' + (k+1)] ){
-								if( data_item.id ){
-									result[i][j][2][k] = data_item.id
-									result[i][j][3][k] = data_item.rf || null
-									result[i][j][4][k] = data_item.rp || null
+					if( data_fleet ){
+						j=0
+						//while( data_ship = data_fleet['s' + (j+1)] ){
+						while( j<max_ships_per_fleet ){
+							data_ship = data_fleet['s' + (j+1)]
+							if( data_ship && data_ship.id ){
+								result[i][j] = [
+									data_ship.id,
+									[
+										data_ship.lv || null,
+										data_ship.luck || -1
+									],
+									[],
+									[],
+									[]
+								]
+								if( data_ship.items ){
+									k=0
+									//while( data_item = data_ship.items['i' + (k+1)] ){
+									while( k<max_equipments_per_ship ){
+										data_item = data_ship.items['i' + (k+1)]
+										if( data_item && data_item.id ){
+											result[i][j][2][k] = data_item.id
+											result[i][j][3][k] = data_item.rf || null
+											result[i][j][4][k] = data_item.rp || null
+										}else{
+											result[i][j][2][k] = null
+											result[i][j][3][k] = null
+											result[i][j][4][k] = null
+										}
+										k++
+									}
 								}
-								k++
+							}else{
+								result[i][j] = null
 							}
+							j++
 						}
-						j++
 					}
 					i++
 				}
+				
+				var data_airfields = data['fField']
+				if( data_airfields ){
+					result[4] = []
+					j=0
+					while( j < 3 ){
+						result[4][j] = []
+						var data_field = data_airfields['f' + (j+1)] || {}
+						k = 0;
+						while( k < 4 ){
+							result[4][j][k] = []
+							var data_aircraft = data_field['i' + (k+1)]
+							if( data_aircraft ){
+								result[4][j][k][0] = data_aircraft.id
+								result[4][j][k][1] = data_aircraft.rp
+							}
+							k++;
+						}
+						j++;
+					}
+				}
+				
 				break;
 		}
 		
@@ -175,6 +218,7 @@ _g.kancolle_calc = {
 		version = parseInt(version) || this.version
 		
 		let result
+			,max_fleets = this.max_fleets
 		
 		switch(version){
 			case 3:
@@ -182,32 +226,51 @@ _g.kancolle_calc = {
 					'version': 3
 				}
 				data.forEach(function(data_fleet, i){
-					result['f' + (i+1)] = {}
-					data_fleet.forEach(function(data_ship, j){
-						if( data_ship[0] ){
-							result['f' + (i+1)]['s' + (j+1)] = {
-								'id':	parseInt(data_ship[0]),
-								'lv':	parseInt(data_ship[1][0]) || null,
-								'luck':	parseInt(data_ship[1][1]) || -1,
-								'items':{
-									'ix': {}
-								}
-							}
-							data_ship[2].forEach(function(id_item, k){
-								if( id_item ){
-									result['f' + (i+1)]['s' + (j+1)].items['i' + (k+1)] = {
-										'id':	parseInt(id_item)
+					if( data_fleet ){
+						if( i < max_fleets ){
+							result['f' + (i+1)] = {}
+							data_fleet.forEach(function(data_ship, j){
+								if( data_ship && data_ship[0] ){
+									result['f' + (i+1)]['s' + (j+1)] = {
+										'id':	parseInt(data_ship[0]),
+										'lv':	parseInt(data_ship[1][0]) || null,
+										'luck':	parseInt(data_ship[1][1]) || -1,
+										'items':{
+											'ix': {}
+										}
 									}
-									if( data_ship[3] )
-										result['f' + (i+1)]['s' + (j+1)].items['i' + (k+1)].rf
-											= parseInt(data_ship[3][k]) || 0
-									if( data_ship[4] )
-										result['f' + (i+1)]['s' + (j+1)].items['i' + (k+1)].rp
-											= parseInt(data_ship[4][k]) || 0
+									data_ship[2].forEach(function(id_item, k){
+										if( id_item ){
+											result['f' + (i+1)]['s' + (j+1)].items['i' + (k+1)] = {
+												'id':	parseInt(id_item)
+											}
+											if( data_ship[3] )
+												result['f' + (i+1)]['s' + (j+1)].items['i' + (k+1)].rf
+													= parseInt(data_ship[3][k]) || 0
+											if( data_ship[4] )
+												result['f' + (i+1)]['s' + (j+1)].items['i' + (k+1)].rp
+													= parseInt(data_ship[4][k]) || 0
+										}
+									})
+								}
+							})
+						}else if( i == 4 ){
+							result['fField'] = {}
+							data_fleet.forEach(function(data_field, j){
+								if( data_field ){
+									result['fField']['f' + (j+1)] = {}
+									data_field.forEach(function(data_aircraft, k){
+										if( data_aircraft && data_aircraft[0] ){
+											result['fField']['f' + (j+1)]['i' + (k+1)] = {
+												'id': 	data_aircraft[0],
+												'rp': 	data_aircraft[1]
+											}
+										}
+									})
 								}
 							})
 						}
-					})
+					}
 				})
 				break;
 		}
