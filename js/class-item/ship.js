@@ -134,7 +134,7 @@ class Ship extends ItemBase{
 	getType(language){
 		language = language || _g.lang
 		return this['type']
-				? _g['data']['ship_types'][this['type']]['full_zh']
+				? _g['data']['ship_types'][this['type']].name.zh_cn
 				: null
 	}
 	get _type(){
